@@ -1,0 +1,5 @@
+mybatis:
+  mapper-locations: classpath:mappers/*Mapper.xml
+spring:
+  profiles:
+    active: sharding-tbl-ms

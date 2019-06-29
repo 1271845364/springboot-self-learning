@@ -1,0 +1,49 @@
+sharding:
+      jdbc:
+        dataSource:
+          names: db-test0,db-test1,db-test2 # 多个数据源的名称
+          # 配置主库
+          db-test0: #org.apache.tomcat.jdbc.pool.DataSource
+            type: com.alibaba.druid.pool.DruidDataSource
+            driverClassName: com.mysql.jdbc.Driver
+            url: jdbc:mysql://192.168.174.129:3306/cool2?useUnicode=true&characterEncoding=utf8&tinyInt1isBit=false&useSSL=false&serverTimezone=GMT
+            username: root
+            password: yjhYJH123@
+            #最大连接数
+            maxPoolSize: 20
+          db-test1: # 配置第一个从库
+            type: com.alibaba.druid.pool.DruidDataSource
+            driverClassName: com.mysql.jdbc.Driver
+            url: jdbc:mysql://192.168.174.130:3306/cool2?useUnicode=true&characterEncoding=utf8&tinyInt1isBit=false&useSSL=false&serverTimezone=GMT
+            username: root
+            password: yjhYJH123@
+            #最大连接数
+            maxPoolSize: 20
+          db-test2: # 配置第二个从库
+            type: com.alibaba.druid.pool.DruidDataSource
+            driverClassName: com.mysql.jdbc.Driver
+            url: jdbc:mysql://192.168.174.131:3306/cool2?useUnicode=true&characterEncoding=utf8&tinyInt1isBit=false&useSSL=false&serverTimezone=GMT
+            username: root
+            password: yjhYJH123@
+            #最大连接数
+            maxPoolSize: 20
+        props:
+          sql: # 开启sql显示，默认值是false，注意：仅配置读写分离时不会打印日志
+            show: true
+
+# 配置的分表信息，真实的数据库信息。ds0.user$->{0..3}，表示读取ds0数据源的user_0、user_1、user_2、user_3。
+sharding.jdbc.config.sharding.tables.user.actual-data-nodes: ds_0.user_$->{0..3}
+# 配置的数据分表的字段，是根据id来分的
+sharding.jdbc.config.sharding.tables.user.table-strategy.standard.sharding-column: id
+# 是配置数据分表的策略的类，这里是自定义的类MyPreciseShardingAlgorithm
+sharding.jdbc.config.sharding.tables.user.table-strategy.standard.precise-algorithm-class-name: com.yejinhui.shardingjdbcmasterslavetables.MyPreciseShardingAlgorithm
+#sharding.jdbc.config.sharding.tables.user.table-strategy.inline.sharding-column=id
+#sharding.jdbc.config.sharding.tables.user.table-strategy.inline.algorithm-expression=user_${id.longValue() % 4}
+
+# 配置的是主库的数据库名，本案例为db-test0，其中ds0为分区名
+sharding.jdbc.config.sharding.master-slave-rules.ds_0.master-data-source-name: db-test0
+# 配置的是从库的数据库名，本案例为db-test1、db-test2
+sharding.jdbc.config.sharding.master-slave-rules.ds_0.slave-data-source-names: db-test1,db-test2
+
+server:
+  port: 8085
