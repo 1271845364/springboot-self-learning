@@ -19,5 +19,6 @@
     <modules>
         <module>sharding-jdbc-master-slave</module>
         <module>sharding-jdbc-master-slave-tables</module>
+        <module>sharding-jdbc-db-ms-tbl</module>
     </modules>
 </project>
