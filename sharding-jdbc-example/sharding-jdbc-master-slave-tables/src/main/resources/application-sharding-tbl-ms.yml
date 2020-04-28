@@ -31,7 +31,7 @@ sharding:
           sql: # 开启sql显示，默认值是false，注意：仅配置读写分离时不会打印日志
             show: true
 
-# 配置的分表信息，真实的数据库信息。ds0.user$->{0..3}，表示读取ds0数据源的user_0、user_1、user_2、user_3。
+# 配置的分表信息，真实的数据库信息。ds_0.user$->{0..3}，表示读取ds_0数据源的user_0、user_1、user_2、user_3。
 sharding.jdbc.config.sharding.tables.user.actual-data-nodes: ds_0.user_$->{0..3}
 # 配置的数据分表的字段，是根据id来分的
 sharding.jdbc.config.sharding.tables.user.table-strategy.standard.sharding-column: id
